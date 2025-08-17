@@ -247,15 +247,32 @@ namespace AssetStoreTools.Uploader
                 Directory.CreateDirectory(outputAssetPath);
 
                 // Every exported asset has a pathname file
+                //using (StreamWriter writer = new StreamWriter($"{outputAssetPath}/pathname"))
+                //    writer.Write(originalAssetPath);
+                // MODIFIED:
+                // Change Samples output files to be exported as Samples~
                 using (StreamWriter writer = new StreamWriter($"{outputAssetPath}/pathname"))
-                    writer.Write(originalAssetPath);
+                {
+                    if (originalAssetPath.Contains("/Samples"))
+                    {
+                        UnityEngine.Debug.Log(originalAssetPath.Replace("/Samples", "/Samples~"));
+                        writer.Write(originalAssetPath.Replace("/Samples", "/Samples~"));
+                    }
+                    else
+                    {
+                        writer.Write(originalAssetPath);
+                    }
+                }
 
                 // Only files (not folders) have an asset file
                 if (File.Exists(originalAssetPath))
                     File.Copy(originalAssetPath, $"{outputAssetPath}/asset");
 
                 // Most files and folders have an asset.meta file (but ProjectSettings folder assets do not)
-                if (File.Exists($"{originalAssetPath}.meta"))
+                //if (File.Exists($"{originalAssetPath}.meta"))
+                //    File.Copy($"{originalAssetPath}.meta", $"{outputAssetPath}/asset.meta");
+                // MODIFIED:
+                if (File.Exists($"{originalAssetPath}.meta") && !originalAssetPath.EndsWith("/Samples"))
                     File.Copy($"{originalAssetPath}.meta", $"{outputAssetPath}/asset.meta");
 
                 // To-do: handle previews in hidden folders as they are not part of the AssetDatabase
