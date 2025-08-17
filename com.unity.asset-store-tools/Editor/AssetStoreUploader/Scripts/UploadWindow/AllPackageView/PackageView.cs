@@ -1,4 +1,6 @@
-﻿using AssetStoreTools.Utility.Json;
+﻿#define UNITY_ASTOOLS_EXPERIMENTAL
+
+using AssetStoreTools.Utility.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
